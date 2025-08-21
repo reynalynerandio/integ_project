@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="src/js/tailwind.js"></script>
+</head>
+<body>
+    <div id="app" class="flex h-screen items-center justify-center">
+        <div>
+            <!-- Form -->
+            <div class="container grip grid-cols-2 gap-2 rounded-sm bg-white shadow-sm p-10 m-10">
+                <input v-model="post.header" type="text" name="header" placeholder="Header" class="border p-2 mt-4 mr-2 rounded-sm shadow-sm">
+                <input v-model="post.subHeader"  type="text" name="subheader" placeholder="Subheader" class="border mt-4 mr-2 p-2 rounded-sm shadow-sm">
+                <input v-model="post.content"  type="text" name="content" placeholder="Content" class="border mt-4 p-2 mr-2 rounded-sm shadow-sm">
+                <button @click="addPost" class="rounded py-2 px-6 my-6 bg-blue-600 text-white">CJ</button>
+            </div>
+            <div v-for="(kahitAno, index) in posts" :key="kahitAno.id" class="container rounded-sm bg-white shadow-sm p-10 m-10">
+                <p>{{kahitAno.id}}</p>
+                <h1 class="text-3xl">{{ kahitAno.header}}</h1>
+                <h4 class="text-xl">{{ kahitAno.subheader}}</h4>
+                <p class="text-sm mt-4">{{ kahitAno.content}}</p>
+                <button class="rounded py-2 px-6 my-6 bg-blue-600 text-white">Learn more</button>
+            </div>
+        </div>
+    </div>
+    <script src="src/js/vue-cdn.js"></script>
+    <script>
+        const { createApp, ref } = Vue;
+
+        const app =createApp({
+            setup() {
+                const postId = ref(1);
+                const post = ref({
+                    "id": postId.value,
+                    "header": "",
+                    "subHeader": "",
+                    "content": ""
+                })
+
+                const posts = ref([]);
+
+                const addPost = () => {
+
+                    if (post.value.header.length === 0 || post.value.subHeader.length === 0 || post.value.content.length === 0) {
+                        alert("Required fields")
+                        return;
+                    }
+
+                    posts.value.push({
+                        "id":postId.value,
+                        "header": post.value.header,
+                        "subHeader":  post.value.subHeader,
+                        "content":  post.value.content
+                    })
+
+                    postId.value +=1;
+
+                    post.value = {
+                        "header": "",
+                        "subHeader": "",
+                        "content": ""
+                    };
+                }
+
+                const removePost = (id) => {
+
+                }
+
+                return {
+                    post,
+                    posts,
+                    addPost
+                }
+            }
+        })
+
+        app.mount("#app")
+        
+    </script>
+</body>
+</html>

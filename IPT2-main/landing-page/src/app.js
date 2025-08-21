@@ -1,0 +1,1 @@
+const { createApp, ref, provide } = Vue;

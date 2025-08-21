@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Modern To-Do List</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(145deg, #e0e0e0, #f5f5f5);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 60px 20px;
+      min-height: 100vh;
+    }
+
+    .todo-container {
+      background: #ffffff;
+      width: 100%;
+      max-width: 420px;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .todo-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .todo-header h1 {
+      font-size: 24px;
+      color: #333;
+      font-weight: 600;
+    }
+
+    .todo-form {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .todo-form input[type="text"] {
+      flex: 1;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .todo-form button {
+      padding: 12px 16px;
+      background: #4f46e5;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    ul.todo-list {
+      list-style: none;
+    }
+
+    ul.todo-list li {
+      display: flex;
+      align-items: center;
+      background: #f9fafb;
+      padding: 12px 14px;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      border: 1px solid #e5e7eb;
+      transition: background 0.3s ease;
+    }
+
+    ul.todo-list li:hover {
+      background: #eef2ff;
+    }
+
+    .todo-list input[type="checkbox"] {
+      accent-color: #4f46e5;
+      width: 18px;
+      height: 18px;
+      margin-right: 12px;
+      cursor: pointer;
+    }
+
+    .task-label {
+      font-size: 15px;
+      color: #111827;
+      user-select: none;
+    }
+
+    .todo-list input[type="checkbox"]:checked + .task-label {
+      text-decoration: line-through;
+      color: #6b7280;
+    }
+
+    .note {
+      font-size: 12px;
+      color: #9ca3af;
+      text-align: center;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="app">
+    <div class="todo-container">
+        <div class="todo-header">
+            <h1>📝 My To-Do Lista</h1>
+            {{ task }}
+        </div>
+
+        <form class="todo-form" id="todo-form" @submit.prevent="addTask">
+            <input type="text" v-model="task" id="task-input" placeholder="Add a new task..." required />
+            <button type="submit">Add</button>
+        </form>
+
+        <ul class="todo-list" id="todo-list">
+            <!-- Initial static items -->
+            <li v-for="(todo, index) in todoList" :key="index">
+                <input type="checkbox" id="task1" :value="todo">
+                <label for="task1" class="task-label">{{ todo }}</label>
+                <div @click="removeTask(todo)">X</div>
+            </li>
+        </ul>
+        <p class="note">(Tasks are not saved after refresh)</p>
+    </div>
+</div>
+
+<script src="src/js/vue-cdn.js"></script>
+<script>
+const app = Vue.createApp({
+    data() {
+        return {
+            task: '',
+            todoList: []
+        }
+    },
+    methods: {
+        addTask() {
+          this.todoList.push(this.task);
+          this.task = "";
+        },
+        removeTask(taskToRemove) {
+          console.log(taskToRemove)
+          // this.todoList.splice(index, 1);
+          this.todoList = this.todoList.filter(todo => todo !==taskToRemove);
+        },
+        findTask(task) {  
+          const foundTask = this.todoList.find(task => task === 'Read book');
+        }
+    },
+    watch: {
+      task(newValue, oldValue) {
+        console.log(newValue, oldValue)
+      }
+    },
+    mounted() {
+
+    }
+})
+
+// Mount the app
+app.mount('#app') 
+</script>
+
+</body>
+</html>

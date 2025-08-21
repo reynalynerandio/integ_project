@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Management Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div class="app-container">
+            <sidebar 
+                :current-view="currentView"
+                @view-change="handleViewChange"
+            ></sidebar>
+            
+            <main class="main-content">
+                <tasks-view
+                    v-if="currentView === 'tasks'"
+                    :tasks="tasks"
+                    @add-task="showAddTaskModal = true"
+                    @edit-task="editTask"
+                    @delete-task="deleteTask"
+                    @task-update="updateTask"
+                ></tasks-view>
+                
+                <div v-else-if="currentView === 'dashboard'" class="dashboard">
+                    <h1>Dashboard</h1>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3>Total Tasks</h3>
+                            <p class="stat-number">{{ tasks.length }}</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Completed Tasks</h3>
+                            <p class="stat-number">{{ tasks.filter(t => t.completed).length }}</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Pending Tasks</h3>
+                            <p class="stat-number">{{ tasks.filter(t => !t.completed).length }}</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <add-task-modal
+            v-if="showAddTaskModal"
+            :task="editingTask"
+            @close="showAddTaskModal = false"
+            @save="editingTask ? updateTask($event) : addTask($event)"
+        ></add-task-modal>
+    </div>
+
+    <script src="Sidebar.js"></script>
+    <script src="AddTaskModal.js"></script>
+    <script src="TasksView.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
